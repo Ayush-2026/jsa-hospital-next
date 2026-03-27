@@ -32,7 +32,7 @@ export default function DoctorMessageSection({ lang = "en" }) {
                     : "ml-auto md:ml-auto md:translate-x-6"
                 } transform`}
               >
-                <div className="rounded-[28px] sm:rounded-[34px] p-6 sm:p-10 bg-gradient-to-r from-[#0b63c7] to-[#38bdf8] text-white shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+                <div className="rounded-[28px] sm:rounded-[34px] p-6 sm:p-10 bg-gradient-to-r from-[#1e7a62] to-[#2c608e] text-white shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
                   {/* Small header text */}
                   <p className="text-xs sm:text-sm opacity-90">
                     Message from Doctor

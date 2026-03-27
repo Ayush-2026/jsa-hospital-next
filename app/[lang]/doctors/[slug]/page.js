@@ -1,7 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDoctorBySlug } from "@/lib/queries/doctors";
+import { getDoctorBySlug, getDoctors } from "@/lib/queries/doctors";
+
+export async function generateStaticParams() {
+  const doctors = await getDoctors();
+  const langs = ["en", "hi", "mr"];
+  return langs.flatMap((lang) =>
+    doctors.map((d) => ({ lang, slug: d.slug }))
+  );
+}
 
 export default async function DoctorDetailPage({ params }) {
   const { lang, slug } = await params;

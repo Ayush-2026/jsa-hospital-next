@@ -27,14 +27,9 @@ export default async function AboutUsPage({ params }) {
 
               <div className="mt-7 flex flex-wrap gap-3">
                 <Link
-                  href={`/${lang}/consultation`}
-                  className="inline-flex items-center justify-center rounded-xl bg-[#255C8D] px-5 py-2.5 text-white font-semibold hover:opacity-95 transition"
-                >
-                  Book Appointment
-                </Link>
-                <Link
                   href={`/${lang}/doctors`}
-                  className="inline-flex items-center justify-center rounded-xl border border-gray-300 px-5 py-2.5 font-semibold text-gray-800 hover:bg-gray-50 transition"
+                  className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-white font-semibold transition"
+                  style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }}
                 >
                   Find a Doctor
                 </Link>
@@ -193,7 +188,7 @@ export default async function AboutUsPage({ params }) {
             </div>
 
             {/* Safety / Quality card */}
-            <div className="w-full lg:w-[420px] rounded-2xl bg-[#295D8B] text-white p-7 sm:p-8 shadow-xl">
+            <div className="w-full lg:w-[420px] rounded-2xl text-white p-7 sm:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #1e7a62, #2c608e)" }}>
               <h3 className="text-xl font-bold">Safety & Quality</h3>
               <p className="mt-3 text-sm text-white/90 leading-relaxed">
                 We follow strict hygiene protocols and maintain quality
@@ -232,7 +227,7 @@ export default async function AboutUsPage({ params }) {
               <div className="mt-7">
                 <Link
                   href={`/${lang}/contact-us`}
-                  className="inline-flex items-center justify-center rounded-xl bg-white text-[#295D8B] px-5 py-2.5 font-semibold hover:bg-gray-100 transition"
+                  className="inline-flex items-center justify-center rounded-xl bg-white text-[#1e7a62] px-5 py-2.5 font-semibold hover:bg-gray-100 transition"
                 >
                   Contact Us
                 </Link>
@@ -242,27 +237,8 @@ export default async function AboutUsPage({ params }) {
         </div>
       </section>
 
-      {/* CTA strip */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 py-10">
-          <div className="rounded-2xl border border-gray-100 bg-gradient-to-r from-[#eaf6ff] to-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#265957]">
-                Need an appointment?
-              </h3>
-              <p className="mt-1 text-sm text-gray-600">
-                Book online in a few steps and we’ll confirm your visit.
-              </p>
-            </div>
-            <Link
-              href={`/${lang}/consultation`}
-              className="inline-flex items-center justify-center rounded-xl bg-[#255C8D] px-6 py-2.5 text-white font-semibold hover:opacity-95 transition"
-            >
-              Book Appointment
-            </Link>
-          </div>
-        </div>
-      </section>
+      
+     
     </main>
   );
 }

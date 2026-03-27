@@ -28,7 +28,7 @@ const HeaderSlider = ({ images = [] }) => {
   }, [slides.length]);
 
   return (
-    <section className= "mt-5 w-full bg-[#183D5E] py-6 sm:py-10">
+    <section className="mt-5 w-full py-6 sm:py-10" style={{ background: 'linear-gradient(to right, #1e7a62, #2c608e)' }}>
       {/* Search bar */}
       <div className="mx-auto w-full max-w-4xl px-4">
         <div className="relative mx-auto w-full max-w-2xl">
@@ -42,7 +42,7 @@ const HeaderSlider = ({ images = [] }) => {
 
       {/* Slider */}
       <div className="mx-auto mt-7 sm:mt-7 w-full max-w-7xl px-4">
-        <div className="relative overflow-hidden rounded-[40px] bg-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.25)]">
+        <div className="relative overflow-hidden rounded-[40px] bg-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.25)] border-2 border-white/30">
           {/* Track */}
           <div
             className="flex transition-transform duration-900 ease-out"
@@ -57,6 +57,7 @@ const HeaderSlider = ({ images = [] }) => {
                     fill
                     className="object-cover"
                     priority={i === 0}
+                    sizes="100vw"
                   />
                   {/* Subtle overlay to match the dark UI vibe */}
                   <div className="absolute inset-0 bg-black/20" />

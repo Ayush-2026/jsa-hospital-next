@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Footer({ lang = "en" }) {
   return (
     <footer>
-      <div className="bg-[#295D8B] text-white flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-white/20">
+      <div className="text-white flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-white/20" style={{ background: 'linear-gradient(to right, #1e7a62, #2c608e)' }}>
         {/* Brand */}
         <div className="w-full md:w-1/3">
           <Link href={`/${lang}`}>
@@ -74,7 +74,7 @@ export default function Footer({ lang = "en" }) {
         </div>
       </div>
 
-      <div className="bg-[#295D8B] text-white py-4 text-center text-xs md:text-sm">
+      <div className="text-white py-4 text-center text-xs md:text-sm" style={{ background: 'linear-gradient(to right, #1e7a62, #2c608e)' }}>
         Copyright 2025 © Balaji LifeCare. All Rights Reserved.
       </div>
     </footer>

@@ -2,15 +2,19 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+
 const Heading = ({ lang = "en" }) => {
   return (
     <div className=" mt-7 flex items-center justify-between px-1 md:px-6 bg-white">
       {/* Left Logo (click → home) */}
-      <Link href={`/${lang}`} className="flex items-center space-x-3">
+      <Link
+        href={`/${lang}`}
+        className="relative h-20 w-20 sm:h-28 sm:w-28 md:h-36 md:w-36"
+      >
         <Image
-          src="/logo.png" // put logo inside /public
+          src="/upLogo.png" // put logo inside /public
           alt="Balaji LifeCare Logo"
-          className="h-12 w-12 sm:h-24 sm:w-24 md:h-28 md:w-28 cursor-pointer"
+          className="h-12 w-12 sm:h-24 sm:w-24 md:h-40 md:w-40 cursor-pointer"
           width={120}
           height={120}
           priority
