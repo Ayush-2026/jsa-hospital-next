@@ -618,3 +618,34 @@ CREATE TABLE IF NOT EXISTS appointments (
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_doctor_slot_active
 ON appointments(doctor_id, schedule_time)
 WHERE status IN ('confirmed','hold');
+
+
+
+
+---------------------------------------------------------
+CONCEPTS & EXPLANATIONS
+---------------------------------------------------------
+
+WHY COOKIES FOR AUTH (not just login credentials)?
+---------------------------------------------------
+HTTP is stateless — every request is independent, the server remembers nothing.
+Without cookies, you'd have to send email + password on every single request — every page load, every API call.
+Cookie solves this — you authenticate once, get a token, and that token is sent automatically on every request.
+Server just verifies the token, no need to re-enter credentials.
+
+Analogy: Cookie is like a wristband at an event — show ID once at entrance, get wristband, flash it everywhere inside.
+
+HOW THE TOKEN/COOKIE WORKS:
+- On login → server signs a JWT token with SESSION_SECRET and stores it in an HTTP-only cookie
+- On every /admin request → middleware verifies the token's signature using same SESSION_SECRET
+- If someone tampers with the token → signature won't match → rejected
+- On logout → server deletes/overwrites the cookie → browser stops sending it → effectively logged out
+
+WHY NOT HASH THE COOKIE?
+- The cookie is NOT hashed and compared to a stored value
+- It's a SIGNED token — the SESSION_SECRET is used to sign (create) and verify (check the stamp is real)
+- Nothing is stored on the server — the token is self-contained with signature baked in
+
+WRONG EMAIL VS WRONG PASSWORD:
+- Both return the same error "Invalid credentials" — intentionally
+- So attackers cannot tell which one was wrong
