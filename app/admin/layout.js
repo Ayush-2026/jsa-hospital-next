@@ -12,6 +12,11 @@ const navLinks = [
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
+  const isLoginPage = pathname === "/admin/login";
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex min-h-screen">

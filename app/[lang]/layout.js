@@ -15,7 +15,7 @@ const {lang} = await params;
       <Heading lang={lang} />
       <Navbar lang={lang} />
       {children}
-      <Footer />
+      <Footer lang={lang}/>
       <WhatsAppButton />
     </>
   );

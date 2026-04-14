@@ -76,7 +76,7 @@ export default async function DoctorDetailPage({ params }) {
 
           {
             <Link
-              href={`/${params.lang}/consultation?doctor=${encodeURIComponent(doctor.slug)}`}
+              href={`/${lang}/consultation?doctor=${encodeURIComponent(doctor.slug)}`}
             >
               <button className="mt-6 rounded-xl bg-blue-600 text-white px-6 py-3 font-semibold hover:bg-blue-500 transition">
                 Book Consultation

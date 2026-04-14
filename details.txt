@@ -649,3 +649,61 @@ WHY NOT HASH THE COOKIE?
 WRONG EMAIL VS WRONG PASSWORD:
 - Both return the same error "Invalid credentials" — intentionally
 - So attackers cannot tell which one was wrong
+
+
+---------------------------------------------------------
+CHANGES MADE - 9th & 12th April 2026
+---------------------------------------------------------
+
+1. NEW COLUMN — doctors table
+   ALTER TABLE doctors ADD COLUMN redirect_link TEXT;
+   Used for Book Appointment button to redirect to third-party booking site.
+
+2. app/admin/layout.js — Hide sidebar on login page
+   Added: const isLoginPage = pathname === "/admin/login";
+   If on login page, return only children (no sidebar rendered).
+
+3. app/[lang]/doctors/page.js — Filter inactive doctors
+   Changed doctors.map to doctors.filter((d) => d.is_active).map
+   Only doctors with is_active = true are shown to patients.
+   Book Appointment button changed from Link to <a> tag with href={d.redirect_link} and target="_blank".
+
+4. app/admin/doctors/page.js — Admin doctors listing page
+   - Fetches all doctors (no active filter) using getDoctors()
+   - pick() uses _en suffix for admin display
+   - Grid: 1 col mobile, 2 col tablet, 3-4 col desktop
+   - Each card has Edit (Link to /admin/doctors/[slug]) and Delete button
+   - Imports DeleteButton component
+
+5. app/admin/doctors/DeleteButton.js — Client component for delete
+   - "use client"
+   - Receives slug as prop
+   - On click: confirm() → fetch DELETE /api/admin/doctors/${slug} → router.refresh()
+
+6. app/api/admin/doctors/[id]/route.js — API endpoints
+   DELETE: await params → sql DELETE FROM doctors WHERE slug = ${id}
+   PUT: await params → await request.json() → sql UPDATE doctors SET all fields WHERE slug = ${id}
+   Both return NextResponse.json({ success: true/false })
+
+7. app/admin/doctors/[slug]/page.js — Edit page (server component)
+   - Imports getDoctorBySlug from lib/queries/doctors
+   - await params to get slug
+   - Fetches doctor and passes as prop to <EditForm doctor={doctor} />
+
+8. app/admin/doctors/[slug]/EditForm.js — Edit form (client component)
+   - "use client"
+   - useState for all 13 fields, pre-filled with doctor prop values
+   - All fields as inputs/textareas with value + onChange
+   - is_active as checkbox
+   - handleSave: fetch PUT /api/admin/doctors/${doctor.slug} with all fields as JSON body
+   - On success: router.push("/admin/doctors")
+
+9. lib/queries/doctors.js — getDoctorBySlug added with unstable_cache
+   Fetches single doctor by slug with revalidate: 3600
+
+10. .env.local variables required:
+    DATABASE_URL=
+    SESSION_SECRET=
+    ADMIN_EMAIL=
+    ADMIN_PASSWORD_HASH=
+    Note: $ in bcrypt hash must be escaped as \$ in .env.local

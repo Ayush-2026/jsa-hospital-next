@@ -13,9 +13,9 @@ export async function POST(request) {
     );
   }
 
-//   const passwordMatch = await verifyPassword(password, process.env.ADMIN_PASSWORD_HASH);
-// console.log("password match:", passwordMatch);
-// console.log("hash:", process.env.ADMIN_PASSWORD_HASH);
+  const passwordMatch = await verifyPassword(password, process.env.ADMIN_PASSWORD_HASH);
+console.log("password match:", passwordMatch);
+console.log("hash:", process.env.ADMIN_PASSWORD_HASH);
 
   
   

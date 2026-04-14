@@ -71,7 +71,7 @@ export default async function DoctorsPage({ params }) {
           <div className="mt-3 h-1 w-16 rounded-full" style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }} />
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {doctors.map((d) => (
+            {doctors.filter((d) =>d.is_active).map((d)=> (
               <div
                 key={d.id}
                 className="bg-white rounded-2xl shadow border border-gray-100 hover:shadow-lg transition p-4 flex flex-col"
@@ -96,12 +96,22 @@ export default async function DoctorsPage({ params }) {
                   </p>
                 </Link>
 
-                <Link
+                {/* <Link
                   href={`/${lang}/consultation?doctor=${encodeURIComponent(d.slug)}`}
                   className="doc-book-btn mt-3"
                 >
                   <span>Book Appointment</span>
-                </Link>
+                </Link> */}
+
+                  <a
+                  href={d.redirect_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="doc-book-btn mt-3"
+                  >
+                  <span>Book Appointment</span>
+                  </a>
+
               </div>
             ))}
           </div>
