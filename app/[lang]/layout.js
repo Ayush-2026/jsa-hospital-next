@@ -11,7 +11,7 @@ const {lang} = await params;
  
   return (
     <>
-      <VelocityComponent />
+      <VelocityComponent lang={lang} />
       <Heading lang={lang} />
       <Navbar lang={lang} />
       {children}

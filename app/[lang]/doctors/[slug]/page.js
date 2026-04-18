@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDoctorBySlug, getDoctors } from "@/lib/queries/doctors";
+import { tr } from "@/lib/translations";
 
 export async function generateStaticParams() {
   const doctors = await getDoctors();
@@ -22,6 +23,7 @@ export default async function DoctorDetailPage({ params }) {
   const name = pick(doctor, "name");
   const specialization = pick(doctor, "specialization");
   const bio = doctor[`bio_${lang}`] || doctor.bio_en || "";
+  const t = tr(lang).doctors;
 
   return (
     <main className="w-full bg-white">
@@ -49,10 +51,10 @@ export default async function DoctorDetailPage({ params }) {
             {/* Specialization highlighted */}
             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2">
               <span className="text-xs sm:text-sm font-semibold text-blue-700">
-                Specialization:
+                {t.specialization}:
               </span>
               <span className="text-xs sm:text-sm font-bold text-blue-800">
-                {specialization || "Specialist"}
+                {specialization || t.specialist}
               </span>
             </div>
 
@@ -67,10 +69,10 @@ export default async function DoctorDetailPage({ params }) {
         <div className="mt-10 sm:mt-14 rounded-2xl border border-gray-100 bg-gradient-to-r from-[#eaf6ff] to-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-[#265957]">
-              Want to consult {name}?
+              {t.wantToConsult} {name}?
             </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Book an appointment online and we’ll confirm your slot.
+              {t.bookOnline}
             </p>
           </div>
 
@@ -79,7 +81,7 @@ export default async function DoctorDetailPage({ params }) {
               href={`/${lang}/consultation?doctor=${encodeURIComponent(doctor.slug)}`}
             >
               <button className="mt-6 rounded-xl bg-blue-600 text-white px-6 py-3 font-semibold hover:bg-blue-500 transition">
-                Book Consultation
+                {t.bookConsultation}
               </button>
             </Link>
 

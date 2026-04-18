@@ -5,22 +5,22 @@ import DoctorMessageSection from "@/components/home/DoctorMessageSection";
 import TalkToOurTeam from "@/components/home/TalkToOurTeam";
 import EventsUpdatesSection from "@/components/home/EventUpdatesSection";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getDepartments } from "@/lib/queries/departments";
+import { getDoctors } from "@/lib/queries/doctors";
 
 export default async function Home({ params }) {
   const { lang } = await params;
-  const dict = await getDictionary(lang);
-  const departments = await getDepartments({ limit: 6 });
+  const [allDepartments, allDoctors] = await Promise.all([getDepartments(), getDoctors()]);
+  const departments = allDepartments.slice(0, 6);
 
   return (
     <>
       {/* Hero — no reveal, visible immediately */}
-      <HeaderSlider />
+      <HeaderSlider lang={lang} doctors={allDoctors} departments={allDepartments} />
 
       {/* Medical assistance — zooms in */}
       <ScrollReveal variant="zoom" duration={700}>
-        <MedicalAssistance />
+        <MedicalAssistance lang={lang} />
       </ScrollReveal>
 
       {/* Departments carousel — fades up */}
@@ -35,12 +35,12 @@ export default async function Home({ params }) {
 
       {/* Events & Updates — slides in from left */}
       <ScrollReveal variant="fadeLeft" duration={750}>
-        <EventsUpdatesSection />
+        <EventsUpdatesSection lang={lang} />
       </ScrollReveal>
 
       {/* Talk to our team — zooms in from above */}
       <ScrollReveal variant="zoomDown" duration={700} delay={50}>
-        <TalkToOurTeam />
+        <TalkToOurTeam lang={lang} />
       </ScrollReveal>
     </>
   );

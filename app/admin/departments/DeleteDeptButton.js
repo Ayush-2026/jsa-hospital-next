@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 
 
-export default function DeleteButton({slug}) {
+export default function DeleteDeptButton({slug}) {
     const router = useRouter();
 
   return (
@@ -13,7 +13,7 @@ export default function DeleteButton({slug}) {
         <button onClick={async ()=>{
             if(confirm("Are you sure you want to delete this doctor?")){
                 //hit delete endpoint
-                await fetch(`/api/admin/doctors/${slug}`, { method: "DELETE" });
+                await fetch(`/api/admin/departments/${slug}`, { method: "DELETE" });
 
                 router.refresh();
             }

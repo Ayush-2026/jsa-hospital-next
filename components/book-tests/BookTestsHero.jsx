@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { tr } from "@/lib/translations";
 
-export default function BookTestsHero({ phoneNumberDial, phoneNumberDisplay }) {
+export default function BookTestsHero({ phoneNumberDial, phoneNumberDisplay, lang = "en" }) {
+  const t = tr(lang).bookTests;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -201,7 +203,7 @@ export default function BookTestsHero({ phoneNumberDial, phoneNumberDisplay }) {
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/70 backdrop-blur-sm border border-[#1e7a62]/20 px-4 py-2 text-[#1e7a62] text-sm font-semibold whitespace-nowrap shadow-sm">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              Lab open 24 / 7
+              {t.labOpen}
             </div>
           </div>
         </div>
@@ -212,20 +214,18 @@ export default function BookTestsHero({ phoneNumberDial, phoneNumberDisplay }) {
           <div className={`relative z-10 max-w-md transition-all duration-300 ${visible ? "" : "opacity-0"}`}>
 
             <p className="hero-tag text-xs sm:text-sm font-bold tracking-widest uppercase text-[#1e7a62]/70">
-              Diagnostic Centre
+              {t.tag}
             </p>
 
             <h1 className="hero-h1 mt-3 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight" style={{ color: "#1a4a3a" }}>
-              Book Lab<br />Tests
+              {t.title}<br />{t.titleAccent}
             </h1>
 
             <div className="hero-h1 mt-4 h-1 w-14 rounded-full" style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }} />
 
             <p className="hero-para mt-5 text-sm sm:text-base text-gray-600 leading-relaxed">
-              Get accurate diagnostic results from our state-of-the-art laboratory.
-              CBC, Thyroid, Lipid, Liver, Kidney, Diabetes and more —
-              all from the comfort of your home or our centre.
-              <strong className="text-gray-800"> One call is all it takes.</strong>
+              {t.desc}
+              <strong className="text-gray-800"> {t.descStrong}</strong>
             </p>
 
             <div className="hero-btn mt-8">
@@ -236,12 +236,12 @@ export default function BookTestsHero({ phoneNumberDial, phoneNumberDisplay }) {
                     <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
                   </svg>
                 </span>
-                <span>Call to Book</span>
+                <span>{t.callToBook}</span>
               </a>
             </div>
 
             <p className="hero-note mt-4 text-xs text-gray-400">
-              {phoneNumberDisplay} &nbsp;·&nbsp; Available 24 / 7
+              {phoneNumberDisplay} &nbsp;·&nbsp; {t.available}
             </p>
           </div>
         </div>

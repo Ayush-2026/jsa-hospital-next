@@ -1,197 +1,305 @@
 "use client";
 import Link from "next/link";
+import { tr } from "@/lib/translations";
 
-const eventsData = [
-  {
-    tag: "Health Camp",
-    tagStyle: "bg-green-100 text-green-700",
-    title: "Free Heart Health Checkup Camp",
-    desc: "Comprehensive cardiac screening for early detection of heart conditions. Free consultation with senior cardiologists.",
-    date: "March 15, 2024",
-  },
-  {
-    tag: "Workshop",
-    tagStyle: "bg-blue-100 text-blue-700",
-    title: "Diabetes Awareness Workshop",
-    desc: "Learn about diabetes management, nutrition, and lifestyle modifications. Expert dietitians and endocrinologists.",
-    date: "March 20, 2024",
-  },
-  {
-    tag: "Conference",
-    tagStyle: "bg-purple-100 text-purple-700",
-    title: "Medical Technology Conference",
-    desc: "Latest advances in medical technology and surgical procedures. CME accredited for medical professionals.",
-    date: "March 25, 2024",
-  },
-];
-
-const updatesData = [
-  {
-    tag: "Equipment",
-    tagStyle: "bg-orange-100 text-orange-700",
-    title: "New Advanced MRI Machine Installed",
-    desc: "State-of-the-art 3 Tesla MRI machine for superior imaging quality and faster diagnosis capabilities.",
-    date: "March 10, 2024",
-  },
-  {
-    tag: "Service",
-    tagStyle: "bg-sky-100 text-sky-700",
-    title: "24/7 Emergency Services Enhanced",
-    desc: "Upgraded emergency department with additional trauma bays and critical care monitoring systems.",
-    date: "March 8, 2024",
-  },
-  {
-    tag: "Digital",
-    tagStyle: "bg-indigo-100 text-indigo-700",
-    title: "Telemedicine Services Launched",
-    desc: "Online consultation services now available for follow-up appointments and routine medical advice.",
-    date: "March 5, 2024",
-  },
-];
-
-function CardItem({ item, accent = "border-gray-200", ctaText, ctaHref }) {
+function CardItem({ item, ctaText, ctaHref, lineColor }) {
   return (
-    <div className="relative pl-5 py-4">
-      <div className={`absolute left-1.5 top-4 bottom-4 w-0.75 rounded-full ${accent}`} />
-
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <span className={`text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${item.tagStyle}`}>
-          {item.tag}
-        </span>
-        <span className="text-[10px] sm:text-xs text-gray-400 ml-auto">{item.date}</span>
+    <div className="eu-item relative flex gap-4 py-4 px-1">
+      {/* Timeline dot + line */}
+      <div className="flex flex-col items-center gap-1 pt-1" style={{ flexShrink: 0 }}>
+        <div className="eu-dot" style={{ background: lineColor }} />
+        <div className="eu-vline" style={{ background: `linear-gradient(to bottom, ${lineColor}55, transparent)` }} />
       </div>
 
-      <h4 className="mt-2 font-semibold text-sm sm:text-base text-gray-800 leading-snug">{item.title}</h4>
-      <p className="mt-1.5 text-xs sm:text-sm text-gray-500 leading-relaxed line-clamp-2">{item.desc}</p>
+      <div className="flex-1 min-w-0 pb-2">
+        {/* Top row: tag + date */}
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <span className="eu-tag" style={{ color: item.tagColor, background: item.tagBg, border: `1px solid ${item.tagColor}22` }}>
+            {item.tag}
+          </span>
+          <span className="eu-date">{item.date}</span>
+        </div>
 
-      <Link
-        href={ctaHref}
-        className="inline-flex items-center gap-1 mt-2 text-xs sm:text-sm font-semibold text-[#1e7a62] hover:underline"
-      >
-        {ctaText} <span>›</span>
-      </Link>
+        {/* Icon + Title */}
+        <div className="flex items-start gap-2">
+          <span className="text-base leading-none mt-0.5">{item.icon}</span>
+          <h4 className="eu-title">{item.title}</h4>
+        </div>
+
+        <p className="eu-desc mt-1.5">{item.desc}</p>
+
+        <Link href={ctaHref} className="eu-read-link">
+          {ctaText} <span className="eu-arrow">→</span>
+        </Link>
+      </div>
     </div>
   );
 }
 
 export default function EventsUpdatesSection({ lang = "en" }) {
+  const t = tr(lang).home.events;
+  const eventsData = t.eventsData;
+  const updatesData = t.updatesData;
   return (
     <>
       <style>{`
+        @keyframes euOrb {
+          0%,100% { transform: scale(1) translate(0,0); }
+          50%      { transform: scale(1.1) translate(-8px,10px); }
+        }
+        @keyframes euFadeUp {
+          from { opacity:0; transform:translateY(20px); }
+          to   { opacity:1; transform:translateY(0); }
+        }
         @keyframes euShine {
           0%   { left: -120%; }
-          100% { left: 130%;  }
+          100% { left: 130%; }
         }
-        .eu-btn {
+        @keyframes euCardIn {
+          from { opacity:0; transform:translateY(16px); }
+          to   { opacity:1; transform:translateY(0); }
+        }
+
+        .eu-section {
           position: relative;
           overflow: hidden;
-          display: block;
-          text-align: center;
+          background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 50%, #f0faf6 100%);
+        }
+        .eu-orb1 {
+          position:absolute; pointer-events:none; border-radius:50%;
+          width:400px; height:400px; top:-100px; left:-80px;
+          background: radial-gradient(circle, rgba(44,96,142,0.07) 0%, transparent 70%);
+          animation: euOrb 11s ease-in-out infinite;
+        }
+        .eu-orb2 {
+          position:absolute; pointer-events:none; border-radius:50%;
+          width:320px; height:320px; bottom:-60px; right:-60px;
+          background: radial-gradient(circle, rgba(30,122,98,0.07) 0%, transparent 70%);
+          animation: euOrb 9s ease-in-out 2s infinite reverse;
+        }
+        .eu-dot-grid {
+          position:absolute; inset:0; pointer-events:none;
+          background-image: radial-gradient(rgba(44,96,142,0.08) 1px, transparent 1px);
+          background-size: 30px 30px;
+          opacity: 0.5;
+        }
+
+        .eu-title-grad {
           background: linear-gradient(to right, #1e7a62, #2c608e);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .eu-underline {
+          display:block; margin:10px auto 0;
+          width:56px; height:3px; border-radius:999px;
+          background: linear-gradient(to right, #1e7a62, #2c608e);
+        }
+
+        /* Panel card */
+        .eu-panel {
+          position: relative;
+          overflow: hidden;
+          background: white;
+          border-radius: 24px;
+          border: 1.5px solid rgba(44,96,142,0.08);
+          box-shadow: 0 8px 40px rgba(44,96,142,0.09), 0 2px 8px rgba(0,0,0,0.04);
+          animation: euCardIn 0.55s ease both;
+          transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        @media (hover: hover) {
+          .eu-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 56px rgba(44,96,142,0.14), 0 4px 16px rgba(0,0,0,0.06);
+          }
+        }
+
+        /* Panel header stripe */
+        .eu-panel-header {
+          padding: 18px 22px 14px;
+          border-bottom: 1px solid rgba(44,96,142,0.07);
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .eu-panel-icon {
+          width: 42px; height: 42px; border-radius: 14px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 1.1rem;
+          flex-shrink: 0;
+        }
+        .eu-panel-title {
+          font-size: 1.05rem; font-weight: 800; color: #1a1a2e;
+        }
+        @media (min-width:640px) { .eu-panel-title { font-size: 1.15rem; } }
+        .eu-panel-count {
+          margin-left: auto;
+          font-size: 0.72rem; font-weight: 700; color: #1e7a62;
+          background: rgba(30,122,98,0.08);
+          border: 1px solid rgba(30,122,98,0.15);
+          padding: 3px 10px; border-radius: 999px;
+        }
+
+        /* Top accent bar */
+        .eu-panel-stripe {
+          position:absolute; top:0; left:0; right:0; height:3px;
+          border-radius: 24px 24px 0 0;
+        }
+
+        /* Item styles */
+        .eu-dot {
+          width: 10px; height: 10px; border-radius: 50%;
+          flex-shrink: 0; margin-top: 2px;
+          box-shadow: 0 0 0 3px rgba(30,122,98,0.1);
+        }
+        .eu-vline {
+          width: 1.5px; flex: 1; min-height: 24px;
+          border-radius: 999px;
+        }
+        .eu-tag {
+          font-size: 0.68rem; font-weight: 700;
+          padding: 2px 10px; border-radius: 999px;
+          letter-spacing: 0.04em; text-transform: uppercase;
+          flex-shrink: 0;
+        }
+        .eu-date {
+          font-size: 0.72rem; color: #9ca3af; font-weight: 500;
+          margin-left: auto;
+        }
+        .eu-title {
+          font-size: 0.875rem; font-weight: 700; color: #111827;
+          line-height: 1.35;
+        }
+        @media (min-width:640px) { .eu-title { font-size: 0.95rem; } }
+        .eu-desc {
+          font-size: 0.78rem; color: #6b7280; line-height: 1.6;
+          display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        @media (min-width:640px) { .eu-desc { font-size: 0.82rem; } }
+        .eu-read-link {
+          display: inline-flex; align-items: center; gap: 4px;
+          margin-top: 8px;
+          font-size: 0.75rem; font-weight: 700; color: #1e7a62;
+          transition: gap 0.2s ease, opacity 0.2s ease;
+        }
+        .eu-read-link:hover { opacity: 0.75; gap: 8px; }
+        .eu-arrow { display:inline-block; transition: transform 0.2s ease; }
+        .eu-read-link:hover .eu-arrow { transform: translateX(2px); }
+
+        /* divider between items */
+        .eu-item + .eu-item { border-top: 1px solid rgba(44,96,142,0.06); }
+
+        /* View button */
+        .eu-view-btn {
+          position: relative; overflow: hidden;
+          display: block; text-align: center;
+          padding: 11px 0;
+          border-radius: 14px;
+          font-weight: 700; font-size: 0.88rem;
           color: white;
-          padding: 12px 0;
-          border-radius: 12px;
-          font-weight: 600;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          box-shadow: 0 4px 18px rgba(30,122,98,0.25);
+          border: none; cursor: pointer;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
-        .eu-btn::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -120%;
-          width: 55%;
-          height: 200%;
-          background: linear-gradient(
-            120deg,
-            transparent 20%,
-            rgba(255,255,255,0.32) 50%,
-            transparent 80%
-          );
-          transform: skewX(-15deg);
+        .eu-view-btn::before {
+          content:''; position:absolute; inset:0;
+          background: linear-gradient(135deg, #1e7a62, #2c608e);
+          transition: opacity 0.3s ease;
         }
-        .eu-btn:hover::after {
-          animation: euShine 0.55s ease forwards;
+        .eu-view-btn::after {
+          content:'';
+          position:absolute; top:-50%; left:-120%;
+          width:55%; height:200%;
+          background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.28) 50%, transparent 80%);
+          transform: skewX(-15deg); z-index:1;
         }
-        .eu-btn:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 18px 44px rgba(30,122,98,0.42), 0 4px 16px rgba(44,96,142,0.22);
+        .eu-view-btn span { position:relative; z-index:2; }
+        @media (hover: hover) {
+          .eu-view-btn:hover::after { animation: euShine 0.55s ease forwards; }
+          .eu-view-btn:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(30,122,98,0.38); }
         }
-        .eu-btn span { position: relative; z-index: 1; }
       `}</style>
 
-      <section className="w-full py-12 sm:py-16 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8">
-          <h2 className="text-center text-2xl sm:text-4xl font-bold text-[#265957]">
-            Events and Updates
-          </h2>
+      <section className="eu-section w-full">
+        <div className="eu-orb1" />
+        <div className="eu-orb2" />
+        <div className="eu-dot-grid" />
 
-          <div className="mt-8 sm:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            {/* Events */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="p-4 sm:p-7">
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-xl bg-blue-50 flex items-center justify-center">
-                    <span className="text-base sm:text-lg">📅</span>
-                  </div>
-                  <h3 className="text-base sm:text-xl font-semibold text-gray-800">
-                    Events & Conferences
-                  </h3>
-                </div>
+        <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-8 py-14 sm:py-20">
 
-                <div className="mt-4 divide-y divide-gray-100">
-                  {eventsData.map((item, idx) => (
-                    <div key={idx} className="py-2">
-                      <CardItem
-                        item={item}
-                        accent="bg-blue-200"
-                        ctaText="Learn More"
-                        ctaHref={`/${lang}/events`}
-                      />
-                    </div>
-                  ))}
-                </div>
+          {/* Heading */}
+          <div className="text-center" style={{ animation: "euFadeUp 0.6s ease both" }}>
+            <p className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-[#1e7a62] mb-2">
+              {t.eyebrow}
+            </p>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#1a1a2e] leading-tight">
+              {t.title}{" "}
+              <span className="eu-title-grad">{t.titleAccent}</span>
+            </h2>
+            <span className="eu-underline" />
+            <p className="mt-4 text-xs sm:text-sm text-gray-500 font-medium">
+              {t.subtitle}
+            </p>
+          </div>
 
-                <div className="mt-6">
-                  <Link href={`/${lang}/events`} className="eu-btn">
-                    <span>View All Events</span>
-                  </Link>
-                </div>
+          {/* Two panels */}
+          <div className="mt-10 sm:mt-14 grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-7">
+
+            {/* Events panel */}
+            <div className="eu-panel flex flex-col" style={{ animationDelay: "0ms" }}>
+              <div className="eu-panel-stripe" style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }} />
+              <div className="eu-panel-header">
+                <div className="eu-panel-icon" style={{ background: "rgba(30,122,98,0.1)" }}>📅</div>
+                <span className="eu-panel-title">{t.eventsPanel}</span>
+                <span className="eu-panel-count">{eventsData.length} {t.upcoming}</span>
+              </div>
+
+              <div className="px-4 sm:px-6 py-2">
+                {eventsData.map((item, idx) => (
+                  <CardItem
+                    key={idx}
+                    item={item}
+                    lineColor="#1e7a62"
+                    ctaText={t.learnMore}
+                    ctaHref={`/${lang}/events`}
+                  />
+                ))}
+              </div>
+
+              <div className="px-4 sm:px-6 pb-5 pt-1 mt-auto">
+                <Link href={`/${lang}/events`} className="eu-view-btn">
+                  <span>{t.viewEvents}</span>
+                </Link>
               </div>
             </div>
 
-            {/* Updates */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="p-4 sm:p-7">
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-xl bg-green-50 flex items-center justify-center">
-                    <span className="text-base sm:text-lg">🔔</span>
-                  </div>
-                  <h3 className="text-base sm:text-xl font-semibold text-gray-800">
-                    Hospital Updates
-                  </h3>
-                </div>
+            {/* Updates panel */}
+            <div className="eu-panel flex flex-col" style={{ animationDelay: "120ms" }}>
+              <div className="eu-panel-stripe" style={{ background: "linear-gradient(to right, #2c608e, #7c3aed)" }} />
+              <div className="eu-panel-header">
+                <div className="eu-panel-icon" style={{ background: "rgba(44,96,142,0.1)" }}>🔔</div>
+                <span className="eu-panel-title">{t.updatesPanel}</span>
+                <span className="eu-panel-count" style={{ color: "#2c608e", background: "rgba(44,96,142,0.08)", borderColor: "rgba(44,96,142,0.15)" }}>{updatesData.length} {t.new}</span>
+              </div>
 
-                <div className="mt-4 divide-y divide-gray-100">
-                  {updatesData.map((item, idx) => (
-                    <div key={idx} className="py-2">
-                      <CardItem
-                        item={item}
-                        accent="bg-green-200"
-                        ctaText="Read More"
-                        ctaHref={`/${lang}/updates`}
-                      />
-                    </div>
-                  ))}
-                </div>
+              <div className="px-4 sm:px-6 py-2">
+                {updatesData.map((item, idx) => (
+                  <CardItem
+                    key={idx}
+                    item={item}
+                    lineColor="#2c608e"
+                    ctaText={t.readMore}
+                    ctaHref={`/${lang}/updates`}
+                  />
+                ))}
+              </div>
 
-                <div className="mt-6">
-                  <Link href={`/${lang}/updates`} className="eu-btn">
-                    <span>View All Updates</span>
-                  </Link>
-                </div>
+              <div className="px-4 sm:px-6 pb-5 pt-1 mt-auto">
+                <Link href={`/${lang}/updates`} className="eu-view-btn">
+                  <span style={{ position: "relative", zIndex: 2 }}>{t.viewUpdates}</span>
+                </Link>
               </div>
             </div>
+
           </div>
         </div>
       </section>

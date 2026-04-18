@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getDoctors } from "@/lib/queries/doctors";
+import { getDepartments } from "@/lib/queries/departments";
 import DeleteButton from "./DeleteButton";
+import { Plus } from "lucide-react";
 
 export default async function DoctorsPage({ params }) {
-  
-  const doctors = await getDoctors();
+
+  const doctors = await getDoctors({ activeOnly: false });
+  const departments = await getDepartments();
 
   const pick = (row, key) => row[`${key}_en`]
+  const getDeptName = (id) => departments.find(d => d.uuid_id === id)?.name_en || "Not assigned"
 
 
   return (
@@ -61,24 +65,31 @@ export default async function DoctorsPage({ params }) {
 
       <div
         className="min-h-screen"
-        style={{ background: "linear-gradient(135deg, #f0faf7 0%, #f4f8ff 100%)" }}
+        style={{
+          background: "linear-gradient(135deg, #f0faf7 0%, #f4f8ff 100%)",
+        }}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-8 py-10">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#265957] tracking-tight">
             Our Doctors
           </h1>
           <p className="mt-2 text-sm sm:text-base font-medium text-gray-500">
-           Add edit and delete doctors.
+            Add edit and delete doctors.
           </p>
-          <div className="mt-3 h-1 w-16 rounded-full" style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }} />
+          <div
+            className="mt-3 h-1 w-16 rounded-full"
+            style={{
+              background: "linear-gradient(to right, #1e7a62, #2c608e)",
+            }}
+          />
 
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {doctors.map((d)=> (
+            {doctors.map((d) => (
               <div
                 key={d.id}
                 className="bg-white rounded-2xl shadow border border-gray-100 hover:shadow-lg transition p-4 flex flex-col"
               >
-                <div  className="flex flex-col flex-1">
+                <div className="flex flex-col flex-1">
                   <div className="relative w-full aspect-4/5 rounded-xl overflow-hidden bg-gray-100">
                     <Image
                       src={d.image_url || "/assets/doctor-placeholder.png"}
@@ -93,8 +104,12 @@ export default async function DoctorsPage({ params }) {
                     {pick(d, "name")}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1 truncate">
                     {pick(d, "specialization")}
+                  </p>
+
+                  <p className="text-xs text-gray-400 mt-1">
+                    {getDeptName(d.department_id)}
                   </p>
                 </div>
 
@@ -105,15 +120,29 @@ export default async function DoctorsPage({ params }) {
                   <span>Book Appointment</span>
                 </Link> */}
 
-                  <div className="flex gap-2 mt-2 flex-wrap">
-                    <Link href={`/admin/doctors/${d.slug}`} className="px-3 py-1 mr-2 border rounded-xl text-white bg-blue-700">Edit</Link>
-                    <DeleteButton slug={d.slug}/>
-                    
-
-                  </div>
-
+                <div className="flex gap-2 mt-2 flex-wrap">
+                  <Link
+                    href={`/admin/doctors/${d.slug}`}
+                    className="px-3 py-1 rounded-xl text-white text-sm font-semibold" style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }}
+                  >
+                    Edit
+                  </Link>
+                  <DeleteButton slug={d.slug} />
+                </div>
               </div>
             ))}
+            <div className="">
+              {/* <Link href="/">
+                <button>Add new doctor</button>
+              </Link> */}
+
+              <Link href="/admin/doctors/addNewDoctor">
+                <div className="bg-white rounded-2xl shadow border border-gray-100 hover:shadow-lg transition p-4 flex flex-col items-center justify-center aspect-[4/5] cursor-pointer">
+                  <Plus size={48} />
+                  <p className="mt-3 font-semibold text-lg">Add new doctor</p>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

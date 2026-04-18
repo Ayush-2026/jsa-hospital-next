@@ -34,12 +34,12 @@ function DeptCard({ dept, lang, index }) {
       }}
     >
       <Link href={`/${lang}/departments/${dept.slug}`} className="block h-full">
-        <div className="text-4xl sm:text-5xl mb-4">{dept.icon || "🏥"}</div>
+        <div className="text-4xl sm:text-5xl mb-4">{dept.icon}</div>
         <div className="dept-page-name text-sm sm:text-[15px] font-extrabold text-gray-900 tracking-tight leading-snug">
-          {dept.name}
+          {dept[`name_${lang}`] || dept.name_en}
         </div>
         <div className="dept-page-desc mt-2 text-[11px] sm:text-xs font-medium text-gray-400 line-clamp-2 leading-relaxed">
-          {dept.short_desc || "Specialized care & advanced treatment."}
+          {dept[`short_desc_${lang}`] || dept.short_desc || "Specialized care & advanced treatment."}
         </div>
       </Link>
     </div>

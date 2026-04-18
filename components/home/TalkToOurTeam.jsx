@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { tr } from "@/lib/translations";
 
-export default function TalkToOurTeam() {
+export default function TalkToOurTeam({ lang = "en" }) {
+  const t = tr(lang).home.talk;
   const googleMapsUrl =
     "https://www.google.com/maps/search/?api=1&query=JSA+Hospital+Nagpur";
 
@@ -69,13 +71,13 @@ export default function TalkToOurTeam() {
                 {/* Text */}
                 <div>
                   <p className="text-xs sm:text-sm font-semibold tracking-widest uppercase opacity-75">
-                    We&apos;re always here for you
+                    {t.alwaysHere}
                   </p>
                   <h2 className="mt-2 text-2xl sm:text-4xl font-bold leading-tight">
-                    Talk to Our Team
+                    {t.title}
                   </h2>
                   <p className="mt-3 text-sm sm:text-base opacity-80 max-w-xs mx-auto leading-relaxed">
-                    Our care team is available <strong>24/7</strong>. One call is all it takes — we&apos;re ready to help you find the right care.
+                    {t.subtitle}
                   </p>
                 </div>
 
@@ -87,10 +89,10 @@ export default function TalkToOurTeam() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
                   </svg>
-                  Call Us Now
+                  {t.callNow}
                 </a>
 
-                <p className="text-xs opacity-60">+91 9999999999 &nbsp;·&nbsp; Available 24 / 7</p>
+                <p className="text-xs opacity-60">+91 9999999999 &nbsp;·&nbsp; {t.available}</p>
               </div>
 
               {/* Right: Map illustration + address */}
@@ -150,9 +152,7 @@ export default function TalkToOurTeam() {
                 {/* Address */}
                 <div className="text-center text-sm sm:text-base text-white/90 leading-relaxed px-2">
                   <p className="font-bold text-white text-base sm:text-lg mb-1">JSA Hospital</p>
-                  <p>123 Medical Center Drive,</p>
-                  <p>Healthcare District, Nagpur,</p>
-                  <p>Maharashtra – 440001</p>
+                  {t.address.map((line) => <p key={line}>{line}</p>)}
                 </div>
 
                 {/* Locate button */}
@@ -161,7 +161,7 @@ export default function TalkToOurTeam() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                     </svg>
-                    Locate Us
+                    {t.locateUs}
                   </button>
                 </a>
 
