@@ -44,8 +44,9 @@ export async function PUT(request, { params }) {
 export async function DELETE(request,{params}) {
   const {id} = await params;
   try{
-    const rows = await sql`DELETE FROM doctors WHERE slug=${id}`
-  return NextResponse.json({success:true});
+    await sql`DELETE FROM doctors WHERE slug=${id}`;
+    revalidateTag("doctors");
+    return NextResponse.json({success:true});
   }
   catch(err){
     return NextResponse.json({success:false});
