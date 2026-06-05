@@ -3,9 +3,7 @@ import { verifyPassword, createToken } from "@/lib/auth";
 
 export async function POST(request) {
   const { email, password } = await request.json();
-  console.log("entered email:", email);
-  console.log("env email:", process.env.ADMIN_EMAIL);
-  console.log("match:", email === process.env.ADMIN_EMAIL);
+
   if (email !== process.env.ADMIN_EMAIL) {
     return NextResponse.json(
       { message: "Invalid credentials" },
@@ -14,14 +12,8 @@ export async function POST(request) {
   }
 
   const passwordMatch = await verifyPassword(password, process.env.ADMIN_PASSWORD_HASH);
-console.log("password match:", passwordMatch);
-console.log("hash:", process.env.ADMIN_PASSWORD_HASH);
 
-  
-  
- if (
-    !(await verifyPassword(password, process.env.ADMIN_PASSWORD_HASH))
-  ) {
+  if (!passwordMatch) {
     return NextResponse.json(
       { message: "Invalid credentials" },
       { status: 401 },
@@ -34,7 +26,8 @@ console.log("hash:", process.env.ADMIN_PASSWORD_HASH);
 
   response.cookies.set("admin_session", token, {
     httpOnly: true,
-    
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60,
   });
 

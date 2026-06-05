@@ -12,8 +12,10 @@ const {lang} = await params;
   return (
     <>
       <VelocityComponent lang={lang} />
-      <Heading lang={lang} />
-      <Navbar lang={lang} />
+      <div className="sticky top-0 z-50">
+        <Heading lang={lang} />
+        <Navbar lang={lang} />
+      </div>
       {children}
       <Footer lang={lang}/>
       <WhatsAppButton />

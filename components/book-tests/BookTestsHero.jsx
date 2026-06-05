@@ -101,7 +101,7 @@ export default function BookTestsHero({ phoneNumberDial, phoneNumberDisplay, lan
         }
       `}</style>
 
-      <section className="relative w-full flex flex-col md:flex-row"
+      <section className="relative w-full flex flex-col md:flex-row overflow-hidden"
         style={{ background: "linear-gradient(160deg, rgba(30,122,98,0.08) 0%, rgba(44,96,142,0.10) 100%)" }}
       >
         {/* decorative blobs */}
