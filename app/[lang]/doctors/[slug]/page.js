@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDoctorBySlug, getDoctors } from "@/lib/queries/doctors";
 import { tr } from "@/lib/translations";
@@ -76,22 +75,12 @@ export default async function DoctorDetailPage({ params }) {
             </p>
           </div>
 
-          {
-            <Link
-              href={`/${lang}/consultation?doctor=${encodeURIComponent(doctor.slug)}`}
-            >
-              <button className="mt-6 rounded-xl bg-blue-600 text-white px-6 py-3 font-semibold hover:bg-blue-500 transition">
-                {t.bookConsultation}
-              </button>
-            </Link>
-
-            /* <Link
-            href={`/${lang}/consultation?doctor=${doctor.slug}`}
-            className="inline-flex items-center justify-center rounded-xl bg-[#255C8D] px-6 py-3 text-white font-semibold hover:opacity-95 transition"
+          <button
+            disabled
+            className="mt-6 rounded-xl bg-blue-600 text-white px-6 py-3 font-semibold opacity-60 cursor-not-allowed"
           >
-            Book Appointment
-          </Link> */
-          }
+            {t.bookConsultation}
+          </button>
         </div>
       </div>
     </main>
