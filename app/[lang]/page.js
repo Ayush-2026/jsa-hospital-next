@@ -4,13 +4,19 @@ import Excellence from "@/components/home/Excellence";
 import DoctorMessageSection from "@/components/home/DoctorMessageSection";
 import TalkToOurTeam from "@/components/home/TalkToOurTeam";
 import EventsUpdatesSection from "@/components/home/EventUpdatesSection";
+import ArticlesSection from "@/components/home/ArticlesSection";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { getDepartments } from "@/lib/queries/departments";
 import { getDoctors } from "@/lib/queries/doctors";
+import { getArticles } from "@/lib/queries/articles";
 
 export default async function Home({ params }) {
   const { lang } = await params;
-  const [allDepartments, allDoctors] = await Promise.all([getDepartments(), getDoctors()]);
+  const [allDepartments, allDoctors, latestArticles] = await Promise.all([
+    getDepartments(),
+    getDoctors(),
+    getArticles({ publishedOnly: true }),
+  ]);
   const departments = allDepartments.slice(0, 6);
 
   return (
@@ -36,6 +42,11 @@ export default async function Home({ params }) {
       {/* Events & Updates — slides in from left */}
       <ScrollReveal variant="fadeLeft" duration={750}>
         <EventsUpdatesSection lang={lang} />
+      </ScrollReveal>
+
+      {/* Articles — fades up */}
+      <ScrollReveal variant="fadeUp" duration={750}>
+        <ArticlesSection lang={lang} articles={latestArticles} />
       </ScrollReveal>
 
       {/* Talk to our team — zooms in from above */}

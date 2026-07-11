@@ -8,6 +8,7 @@ const navLinks = [
   { label: "Departments", href: "/admin/departments" },
   { label: "Events", href: "/admin/events" },
   { label: "Updates", href: "/admin/updates" },
+  { label: "Articles", href: "/admin/articles" },
 ];
 
 export default function AdminLayout({ children }) {
