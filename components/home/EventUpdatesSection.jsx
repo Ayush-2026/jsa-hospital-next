@@ -2,7 +2,17 @@
 import Link from "next/link";
 import { tr } from "@/lib/translations";
 
-function CardItem({ item, ctaText, ctaHref, lineColor }) {
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  return new Date(dateStr).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+}
+
+function CardItem({ item, lang, dateField, ctaText, ctaHref, lineColor }) {
+  const tag = item[`tag_${lang}`] || item.tag_en;
+  const title = item[`title_${lang}`] || item.title_en;
+  const desc = item[`desc_${lang}`] || item.desc_en;
+  const date = formatDate(item[dateField]);
+
   return (
     <div className="eu-item relative flex gap-4 py-4 px-1">
       {/* Timeline dot + line */}
@@ -14,19 +24,17 @@ function CardItem({ item, ctaText, ctaHref, lineColor }) {
       <div className="flex-1 min-w-0 pb-2">
         {/* Top row: tag + date */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <span className="eu-tag" style={{ color: item.tagColor, background: item.tagBg, border: `1px solid ${item.tagColor}22` }}>
-            {item.tag}
-          </span>
-          <span className="eu-date">{item.date}</span>
+          {tag && (
+            <span className="eu-tag" style={{ color: item.tag_color, background: item.tag_bg, border: `1px solid ${item.tag_color}22` }}>
+              {tag}
+            </span>
+          )}
+          {date && <span className="eu-date">{date}</span>}
         </div>
 
-        {/* Icon + Title */}
-        <div className="flex items-start gap-2">
-          <span className="text-base leading-none mt-0.5">{item.icon}</span>
-          <h4 className="eu-title">{item.title}</h4>
-        </div>
+        <h4 className="eu-title">{title}</h4>
 
-        <p className="eu-desc mt-1.5">{item.desc}</p>
+        {desc && <p className="eu-desc mt-1.5">{desc}</p>}
 
         <Link href={ctaHref} className="eu-read-link">
           {ctaText} <span className="eu-arrow">→</span>
@@ -36,10 +44,13 @@ function CardItem({ item, ctaText, ctaHref, lineColor }) {
   );
 }
 
-export default function EventsUpdatesSection({ lang = "en" }) {
+export default function EventsUpdatesSection({ lang = "en", events = [], updates = [] }) {
   const t = tr(lang).home.events;
-  const eventsData = t.eventsData;
-  const updatesData = t.updatesData;
+  const eventsData = events.slice(0, 3);
+  const updatesData = updates.slice(0, 3);
+
+  if (eventsData.length === 0 && updatesData.length === 0) return null;
+
   return (
     <>
       <style>{`
@@ -122,23 +133,10 @@ export default function EventsUpdatesSection({ lang = "en" }) {
           align-items: center;
           gap: 12px;
         }
-        .eu-panel-icon {
-          width: 42px; height: 42px; border-radius: 14px;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 1.1rem;
-          flex-shrink: 0;
-        }
         .eu-panel-title {
           font-size: 1.05rem; font-weight: 800; color: #1a1a2e;
         }
         @media (min-width:640px) { .eu-panel-title { font-size: 1.15rem; } }
-        .eu-panel-count {
-          margin-left: auto;
-          font-size: 0.72rem; font-weight: 700; color: #1e7a62;
-          background: rgba(30,122,98,0.08);
-          border: 1px solid rgba(30,122,98,0.15);
-          padding: 3px 10px; border-radius: 999px;
-        }
 
         /* Top accent bar */
         .eu-panel-stripe {
@@ -188,6 +186,12 @@ export default function EventsUpdatesSection({ lang = "en" }) {
 
         /* divider between items */
         .eu-item + .eu-item { border-top: 1px solid rgba(44,96,142,0.06); }
+
+        .eu-empty {
+          padding: 20px 22px 24px;
+          font-size: 0.85rem;
+          color: #9ca3af;
+        }
 
         /* View button */
         .eu-view-btn {
@@ -248,22 +252,26 @@ export default function EventsUpdatesSection({ lang = "en" }) {
             <div className="eu-panel flex flex-col" style={{ animationDelay: "0ms" }}>
               <div className="eu-panel-stripe" style={{ background: "linear-gradient(to right, #1e7a62, #2c608e)" }} />
               <div className="eu-panel-header">
-                <div className="eu-panel-icon" style={{ background: "rgba(30,122,98,0.1)" }}>📅</div>
                 <span className="eu-panel-title">{t.eventsPanel}</span>
-                <span className="eu-panel-count">{eventsData.length} {t.upcoming}</span>
               </div>
 
-              <div className="px-4 sm:px-6 py-2">
-                {eventsData.map((item, idx) => (
-                  <CardItem
-                    key={idx}
-                    item={item}
-                    lineColor="#1e7a62"
-                    ctaText={t.learnMore}
-                    ctaHref={`/${lang}/events`}
-                  />
-                ))}
-              </div>
+              {eventsData.length > 0 ? (
+                <div className="px-4 sm:px-6 py-2">
+                  {eventsData.map((item) => (
+                    <CardItem
+                      key={item.id}
+                      item={item}
+                      lang={lang}
+                      dateField="event_date"
+                      lineColor="#1e7a62"
+                      ctaText={t.learnMore}
+                      ctaHref={`/${lang}/events`}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="eu-empty">No upcoming events right now.</p>
+              )}
 
               <div className="px-4 sm:px-6 pb-5 pt-1 mt-auto">
                 <Link href={`/${lang}/events`} className="eu-view-btn">
@@ -276,22 +284,26 @@ export default function EventsUpdatesSection({ lang = "en" }) {
             <div className="eu-panel flex flex-col" style={{ animationDelay: "120ms" }}>
               <div className="eu-panel-stripe" style={{ background: "linear-gradient(to right, #2c608e, #7c3aed)" }} />
               <div className="eu-panel-header">
-                <div className="eu-panel-icon" style={{ background: "rgba(44,96,142,0.1)" }}>🔔</div>
                 <span className="eu-panel-title">{t.updatesPanel}</span>
-                <span className="eu-panel-count" style={{ color: "#2c608e", background: "rgba(44,96,142,0.08)", borderColor: "rgba(44,96,142,0.15)" }}>{updatesData.length} {t.new}</span>
               </div>
 
-              <div className="px-4 sm:px-6 py-2">
-                {updatesData.map((item, idx) => (
-                  <CardItem
-                    key={idx}
-                    item={item}
-                    lineColor="#2c608e"
-                    ctaText={t.readMore}
-                    ctaHref={`/${lang}/updates`}
-                  />
-                ))}
-              </div>
+              {updatesData.length > 0 ? (
+                <div className="px-4 sm:px-6 py-2">
+                  {updatesData.map((item) => (
+                    <CardItem
+                      key={item.id}
+                      item={item}
+                      lang={lang}
+                      dateField="update_date"
+                      lineColor="#2c608e"
+                      ctaText={t.readMore}
+                      ctaHref={`/${lang}/updates`}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="eu-empty">No updates right now.</p>
+              )}
 
               <div className="px-4 sm:px-6 pb-5 pt-1 mt-auto">
                 <Link href={`/${lang}/updates`} className="eu-view-btn">

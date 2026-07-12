@@ -5,17 +5,24 @@ import DoctorMessageSection from "@/components/home/DoctorMessageSection";
 import TalkToOurTeam from "@/components/home/TalkToOurTeam";
 import EventsUpdatesSection from "@/components/home/EventUpdatesSection";
 import ArticlesSection from "@/components/home/ArticlesSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { getDepartments } from "@/lib/queries/departments";
 import { getDoctors } from "@/lib/queries/doctors";
 import { getArticles } from "@/lib/queries/articles";
+import { getTestimonials } from "@/lib/queries/testimonials";
+import { getEvents } from "@/lib/queries/events";
+import { getUpdates } from "@/lib/queries/updates";
 
 export default async function Home({ params }) {
   const { lang } = await params;
-  const [allDepartments, allDoctors, latestArticles] = await Promise.all([
+  const [allDepartments, allDoctors, latestArticles, testimonials, events, updates] = await Promise.all([
     getDepartments(),
     getDoctors(),
     getArticles({ publishedOnly: true }),
+    getTestimonials({ publishedOnly: true }),
+    getEvents({ publishedOnly: true }),
+    getUpdates({ publishedOnly: true }),
   ]);
   const departments = allDepartments.slice(0, 6);
 
@@ -41,12 +48,17 @@ export default async function Home({ params }) {
 
       {/* Events & Updates — slides in from left */}
       <ScrollReveal variant="fadeLeft" duration={750}>
-        <EventsUpdatesSection lang={lang} />
+        <EventsUpdatesSection lang={lang} events={events} updates={updates} />
       </ScrollReveal>
 
       {/* Articles — fades up */}
       <ScrollReveal variant="fadeUp" duration={750}>
         <ArticlesSection lang={lang} articles={latestArticles} />
+      </ScrollReveal>
+
+      {/* Testimonials — continuously moving marquee */}
+      <ScrollReveal variant="fadeUp" duration={750}>
+        <TestimonialsSection lang={lang} testimonials={testimonials} />
       </ScrollReveal>
 
       {/* Talk to our team — zooms in from above */}
